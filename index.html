@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz Premiado</title>
+<!--
+  ANÚNCIOS EM PRODUÇÃO (AdSense para jogos / H5 Games Ads — precisa de aprovação do Google).
+  Usa dois formatos: "next" (entre os níveis) e "reward" (anúncio premiado do botão de dica).
+  Descomente e troque o ca-pub pelo seu. Enquanto isso, o site mostra anúncios simulados.
+
+<script async data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-adbreak-test="on"
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  window.adsbygoogle = window.adsbygoogle || [];
+  var adBreak = adConfig = function (o) { adsbygoogle.push(o); };
+  adConfig({ preloadAdBreaks: 'on' });
+</script>
+-->
+<style>
+:root{--bg:#f6f4ff;--card:#fff;--txt:#1d1838;--sub:#5d5880;--pri:#6a3df0;--pri2:#5128d6;--ouro:#f5b70a;--ok:#14a05a;--err:#d93a3a;--borda:#e3def7;--sombra:0 6px 24px rgba(60,30,160,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#120f24;--card:#1d1936;--txt:#f1eeff;--sub:#a9a3cc;--pri:#8b67ff;--pri2:#a68aff;--borda:#2f2a52;--sombra:none}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5}
+a{color:var(--pri)}
+.demo{background:var(--ouro);color:#2b2100;text-align:center;font-size:13px;padding:6px 16px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;max-width:960px;margin:0 auto;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;text-decoration:none;color:var(--txt)}
+.nav{display:flex;gap:4px}
+.nav a{text-decoration:none;color:var(--sub);padding:6px 12px;border-radius:999px;font-weight:600;font-size:15px}
+.nav a.ativo,.nav a:hover{background:var(--card);color:var(--pri)}
+main{max-width:960px;margin:0 auto;padding:8px 16px 40px}
+footer{max-width:960px;margin:0 auto;padding:24px 16px 40px;color:var(--sub);font-size:13px;text-align:center;border-top:1px solid var(--borda)}
+footer a.discreto{color:inherit;text-decoration:none;cursor:default}
+.card{background:var(--card);border:1px solid var(--borda);border-radius:18px;padding:22px;box-shadow:var(--sombra);margin-bottom:16px}
+.centro{text-align:center}
+.estreito{max-width:520px;margin:16px auto}
+.btn{display:inline-block;border:0;background:var(--pri);color:#fff;font-weight:700;font-size:16px;padding:12px 22px;border-radius:12px;cursor:pointer;text-decoration:none;font-family:inherit}
+.btn:hover{background:var(--pri2)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.grande{font-size:18px;padding:15px 30px}
+.btn.sec{background:transparent;color:var(--pri);border:2px solid var(--pri)}
+.btn.peq{font-size:13px;padding:6px 12px;border-radius:8px}
+.btn.perigo{background:var(--err)}
+.btn.zap{background:#1fa855}
+.btn.cheio{width:100%}
+.mini{font-size:13px;color:var(--sub)}
+.aviso{padding:12px 16px;border-radius:12px;margin-bottom:16px;background:var(--card);border:1px solid var(--borda)}
+.aviso.ok{border-color:var(--ok)}
+.aviso.alerta{border-color:var(--ouro)}
+.aviso.bloqueio{border-color:var(--err);color:var(--err);font-weight:600}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center;padding:24px 0}
+.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:12px 0}
+.destaque{color:var(--pri)}
+.tag{display:inline-block;background:var(--card);border:1px solid var(--borda);color:var(--ok);font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px}
+.foto-premio{width:100%;max-width:320px;height:auto;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto;border-radius:24px;background:#fff}
+.passos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.passo{background:var(--card);border:1px solid var(--borda);border-radius:18px;padding:20px}
+.passo b{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--pri);color:#fff}
+.passo h3{margin:10px 0 4px}
+.passo p{margin:0;color:var(--sub)}
+@media (max-width:700px){.hero{grid-template-columns:1fr}.hero-img{order:-1}.hero-img .foto-premio{max-width:220px}.passos{grid-template-columns:1fr}}
+form label{display:block;font-weight:600;margin:12px 0 4px}
+input[type=text],input[type=tel],input[type=password],input[type=number],input[type=date],input[type=search]{width:100%;padding:12px;border-radius:10px;border:1px solid var(--borda);background:var(--bg);color:var(--txt);font-size:16px;font-family:inherit}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400 !important}
+.check input{margin-top:5px;width:18px;height:18px}
+fieldset{border:0;padding:0;margin:16px 0 0}
+legend{font-weight:600;padding:0;margin-bottom:6px}
+.escolha{display:flex;gap:10px}
+.escolha label{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:12px;border:2px solid var(--borda);border-radius:12px;cursor:pointer;font-weight:600}
+.escolha label:has(input:checked){border-color:var(--pri);color:var(--pri)}
+.escolha input{width:18px;height:18px}
+.erro{color:var(--err);font-weight:600;min-height:1.5em}
+#caixa-turnstile{margin-top:14px;min-height:65px}
+.quiz{max-width:620px;margin:0 auto}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{background:var(--pri);color:#fff;font-weight:700;padding:4px 12px;border-radius:999px;font-size:14px}
+.pill.ouro{background:var(--ouro);color:#2b2100}
+.pergunta{font-size:clamp(20px,4vw,26px);margin:10px 0 18px}
+.opcoes{display:grid;gap:10px}
+.opcao{text-align:left;padding:14px 16px;font-size:17px;border-radius:12px;border:2px solid var(--borda);background:var(--card);color:var(--txt);cursor:pointer;font-family:inherit;font-weight:600}
+.opcao:hover:not(:disabled){border-color:var(--pri)}
+.opcao.certa{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card))}
+.opcao.errada{border-color:var(--err);opacity:.55;text-decoration:line-through}
+.opcao.eliminada{opacity:.3;text-decoration:line-through;border-style:dashed}
+.dica{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px dashed var(--borda)}
+.dica .btn{background:var(--ouro);color:#2b2100}
+.dica .btn:hover{background:#e0a600}
+.feedback{min-height:1.6em;font-weight:700;margin-top:14px}
+.emoji{font-size:56px}
+.numeros{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.num{font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:18px;letter-spacing:2px;background:var(--ouro);color:#2b2100;padding:6px 12px;border-radius:10px}
+.numeros.grande .num{font-size:30px;padding:10px 20px}
+.linha{display:flex;gap:8px;flex-wrap:wrap}
+.linha input{flex:1;min-width:200px}
+.lista{list-style:none;padding:0;margin:0}
+.lista li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--borda)}
+.lista li small{display:block;color:var(--sub)}
+.ad-overlay{position:fixed;inset:0;background:rgba(10,8,25,.85);display:grid;place-items:center;z-index:50;padding:16px}
+.ad-box{background:var(--card);border-radius:18px;padding:18px;width:min(420px,100%);text-align:center}
+.ad-fake{height:260px;display:grid;place-items:center;border:2px dashed var(--borda);border-radius:12px;margin:10px 0 14px;font-weight:700;color:var(--sub)}
+.ad-fake span{font-weight:400;font-size:13px}
+.abas{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.abas a{text-decoration:none;padding:8px 14px;border-radius:10px;background:var(--card);border:1px solid var(--borda);font-weight:600;color:var(--sub)}
+.abas a.ativo{background:var(--pri);color:#fff;border-color:var(--pri)}
+.admin-topo{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tabela{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--borda);white-space:nowrap}
+th{color:var(--sub);font-weight:600}
+.op{display:flex !important;gap:8px;align-items:center;font-weight:400 !important}
+.op input[type=radio]{width:20px;height:20px}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:14px}
+.kpi b{display:block;font-size:26px}
+.kpi span{color:var(--sub);font-size:13px}
+.carregando{text-align:center;color:var(--sub);padding:48px 0}
+</style>
+</head>
+<body>
+<div class="demo" id="faixa" hidden>Modo de teste local. Anti-robô e anúncios simulados.</div>
+<header class="topo">
+  <a class="logo" href="#">🍀 Quiz Premiado</a>
+  <nav class="nav"><a href="#premio">Prêmio</a><a href="#quiz">Jogar</a><a href="#conta">Minha conta</a></nav>
+</header>
+<main id="app"><p class="carregando">Carregando…</p></main>
+<footer>
+  <p>Participação gratuita. Os números da sorte são ganhos só pelo desempenho no quiz e por indicações. Assistir anúncios não dá nem tira números.</p>
+  <p><a href="#regulamento">Regulamento</a> · <a href="#privacidade">Privacidade</a></p>
+  <p><a href="#admin" class="discreto" aria-label="Área restrita">©</a> 2026 Quiz Premiado</p>
+</footer>
+
+<script type="module" src="servidor-falso.js"></script>
+<script type="module">
+import { turnstileChaveDoSite, faixa } from './config.js';
+
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+// No computador usa a chave de teste da Cloudflare, que sempre aprova.
+const CHAVE_TURNSTILE = LOCAL ? '1x00000000000000000000AA' : turnstileChaveDoSite;
+if (LOCAL || faixa) {
+  const el = document.getElementById('faixa');
+  if (faixa) el.textContent = faixa;
+  el.hidden = false;
+}
+
+// ---------- Acesso ----------
+// O cadastro devolve um token que fica guardado neste celular. O administrador tem outro token.
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+const CHAVE_SESSAO = 'quizSessao', CHAVE_ADMIN = 'quizAdmin';
+
+class ErroApi extends Error {
+  constructor(status, mensagem) { super(mensagem); this.status = status; }
+}
+
+async function api(caminho, { metodo = 'POST', corpo, admin = false } = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = lsGet(admin ? CHAVE_ADMIN : CHAVE_SESSAO);
+  if (token) headers.Authorization = 'Bearer ' + token;
+  let r;
+  try {
+    r = await fetch('/api/' + caminho, { method: metodo, headers, body: corpo === undefined ? undefined : JSON.stringify(corpo) });
+  } catch (e) {
+    throw new ErroApi(0, 'Falha de conexão. Verifique sua internet.');
+  }
+  const dados = await r.json().catch(() => null);
+  if (!r.ok) throw new ErroApi(r.status, dados?.erro || 'Algo deu errado. Tente de novo.');
+  return dados;
+}
+const chamar = (acao, dados = {}) => api(acao, { corpo: dados });
+const adm = (caminho, opcoes = {}) => api('admin/' + caminho, { metodo: 'GET', ...opcoes, admin: true });
+
+const CONFIG_PADRAO = {
+  premio: 'iPhone 15 Pro Max 256 GB', dataSorteio: '', extracao: 'Loteria Federal', certificado: '', idadeMinima: 13,
+  perguntasPorNivel: 3, niveisPorNumero: 5, nivelIndicacao: 1,
+  numerosPorIndicacao: 1, minutosEntreAnuncios: 10, niveisEntreAnuncios: 10
+};
+
+// ---------- Estado ----------
+let conta = null;     // resposta de minhaConta (null = sem cadastro neste celular)
+let cfg = { ...CONFIG_PADRAO };
+let pronto = false;
+let versao = 0;       // muda a cada troca de tela; telas assíncronas param se ficarem velhas
+
+// ---------- Utilidades ----------
+const $ = (s, el = document) => el.querySelector(s);
+const app = $('#app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const primeiroNome = n => String(n || '').trim().split(/\s+/)[0];
+const soDigitos = s => String(s ?? '').replace(/\D/g, '');
+const dataBR = iso => iso ? new Date(iso + 'T12:00:00').toLocaleDateString('pt-BR') : '—';
+const quando = ms => ms ? new Date(ms).toLocaleString('pt-BR') : '';
+const carregando = (t = 'Carregando…') => { app.innerHTML = `<p class="carregando">${t}</p>`; };
+const mensagemErro = e => esc(e?.message || 'Algo deu errado. Tente de novo.');
+function fmtTel(d) {
+  d = soDigitos(d).slice(0, 11);
+  if (d.length <= 2) return d.length ? '(' + d : '';
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+function embaralhar(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const baseDoSite = () => location.origin + location.pathname;
+const linkIndicacao = codigo => baseDoSite() + '?ref=' + codigo;
+const linkAcesso = token => baseDoSite() + '?acesso=' + encodeURIComponent(token);
+const linkZap = (telefone, texto) => `https://wa.me/55${soDigitos(telefone)}?text=${encodeURIComponent(texto)}`;
+function copiar(input, botao) {
+  input.select();
+  (navigator.clipboard ? navigator.clipboard.writeText(input.value) : Promise.reject()).catch(() => document.execCommand('copy'));
+  botao.textContent = 'Copiado!';
+}
+function baixarCSV(nome, linhas) {
+  const csv = '﻿' + linhas.map(l => l.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(';')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = nome; a.click(); URL.revokeObjectURL(a.href);
+}
+// Foto do prêmio: troque o arquivo public/premio.webp para mudar a imagem.
+const fotoPremio = () => `<img class="foto-premio" src="premio.webp" alt="${esc(cfg.premio)}" width="500" height="500">`;
+
+// Carrega o Turnstile (anti-robô da Cloudflare) só quando a tela de cadastro abre.
+let turnstilePronto = null;
+function carregarTurnstile() {
+  turnstilePronto ??= new Promise((ok, falha) => {
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true;
+    s.onload = () => ok(window.turnstile);
+    s.onerror = () => { turnstilePronto = null; falha(new Error('Não foi possível carregar a verificação anti-robô.')); };
+    document.head.append(s);
+  });
+  return turnstilePronto;
+}
+
+// ---------- Anúncios ----------
+// Entre níveis: só aparece depois que o número da sorte (se houver) já foi entregue.
+function mostrarAnuncio(nome) {
+  return new Promise(resolve => {
+    if (typeof window.adBreak === 'function') {
+      window.adBreak({ type: 'next', name: nome, adBreakDone: () => resolve() });
+      return;
+    }
+    const ov = document.createElement('div');
+    ov.className = 'ad-overlay';
+    ov.innerHTML = `<div class="ad-box"><small class="mini">Publicidade</small>
+      <div class="ad-fake"><div>Espaço do anúncio<br><span>(simulação: no site real aparece o anúncio do Google)</span></div></div>
+      <button class="btn" disabled>Continuar em <b>5</b>s</button></div>`;
+    document.body.append(ov);
+    const btn = $('button', ov);
+    let s = 5;
+    const t = setInterval(() => {
+      s--;
+      if (s <= 0) { clearInterval(t); btn.disabled = false; btn.textContent = 'Continuar'; }
+      else $('b', btn).textContent = s;
+    }, 1000);
+    btn.onclick = () => { ov.remove(); resolve(); };
+  });
+}
+
+// Anúncio premiado do botão de dica. Resolve 'viu' (assistiu até o fim),
+// 'fechou' (fechou antes) ou 'indisponivel' (o Google não tinha anúncio agora).
+function anuncioPremiado() {
+  return new Promise(resolve => {
+    if (typeof window.adBreak === 'function') {
+      let viu = false, ofereceu = false;
+      window.adBreak({
+        type: 'reward', name: 'dica',
+        beforeReward: mostrar => { ofereceu = true; mostrar(); },
+        adViewed: () => { viu = true; },
+        adDismissed: () => {},
+        adBreakDone: () => resolve(viu ? 'viu' : ofereceu ? 'fechou' : 'indisponivel')
+      });
+      return;
+    }
+    const ov = document.createElement('div');
+    ov.className = 'ad-overlay';
+    ov.innerHTML = `<div class="ad-box"><small class="mini">Anúncio premiado</small>
+      <div class="ad-fake"><div>Vídeo do anúncio<br><span>(simulação: no site real aparece o anúncio premiado do Google)</span></div></div>
+      <p class="mini" id="restante">Assista até o fim para ganhar a dica: <b>15</b>s</p>
+      <div class="linha" style="justify-content:center"><button class="btn sec peq" id="fechar">Fechar</button><button class="btn" id="pegar" disabled>Pegar minha dica</button></div></div>`;
+    document.body.append(ov);
+    let s = 15;
+    const t = setInterval(() => {
+      s--;
+      if (s <= 0) { clearInterval(t); $('#pegar', ov).disabled = false; $('#restante', ov).textContent = '✅ Anúncio concluído!'; }
+      else $('#restante b', ov).textContent = s;
+    }, 1000);
+    const fim = r => { clearInterval(t); ov.remove(); resolve(r); };
+    $('#fechar', ov).onclick = () => fim(s <= 0 ? 'viu' : 'fechou');
+    $('#pegar', ov).onclick = () => fim('viu');
+  });
+}
+
+// ---------- Rotas ----------
+function go(h) { if (location.hash === h) render(); else location.hash = h; }
+window.addEventListener('hashchange', render);
+function render() {
+  versao++;
+  const [rota, sub] = location.hash.slice(1).split('/');
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('ativo', a.getAttribute('href') === '#' + rota));
+  if (!pronto) return carregando();
+  const rotas = {
+    cadastro: renderCadastro, quiz: renderQuiz, conta: renderConta, premio: renderPremio,
+    regulamento: renderRegulamento, privacidade: renderPrivacidade, admin: () => renderAdmin(sub || 'resumo')
+  };
+  (rotas[rota] || renderInicio)();
+  window.scrollTo(0, 0);
+}
+// Devolve true se este celular tem cadastro; senão manda para o cadastro.
+function exigirCadastro() {
+  if (!conta) { go('#cadastro'); return false; }
+  return true;
+}
+// Sessão inválida (ex.: o administrador gerou um link novo): esquece o cadastro deste celular.
+function tratarSessaoPerdida(e) {
+  if (e?.status !== 401) return false;
+  lsDel(CHAVE_SESSAO);
+  conta = null;
+  go('#cadastro');
+  return true;
+}
+
+// ---------- Início ----------
+async function renderInicio() {
+  const v = versao;
+  const ref = lsGet('refPendente');
+  const pintar = conv => {
+    app.innerHTML = `
+      ${conv ? `<div class="aviso ok">🎁 <b>${esc(conv)}</b> te convidou! Cadastre-se e jogue para participar.</div>` : ''}
+      <section class="hero">
+        <div>
+          <span class="tag">Participação gratuita</span>
+          <h1>Responda o quiz e concorra a um <span class="destaque">${esc(cfg.premio)}</span></h1>
+          <p>Perguntas fáceis, sem pegadinha. A cada ${cfg.niveisPorNumero} níveis concluídos você ganha um número da sorte.</p>
+          <a class="btn grande" href="#quiz">${conta ? 'Continuar jogando' : 'Quero participar'}</a>
+          ${cfg.dataSorteio ? `<p class="mini">Sorteio em ${dataBR(cfg.dataSorteio)} pela ${esc(cfg.extracao)}.</p>` : ''}
+        </div>
+        <div class="hero-img">${fotoPremio()}</div>
+      </section>
+      <section class="passos">
+        <div class="passo"><b>1</b><h3>Cadastre-se</h3><p>Só seu nome e WhatsApp. Leva 30 segundos.</p></div>
+        <div class="passo"><b>2</b><h3>Jogue o quiz</h3><p>Sem tempo, pense com calma. Errou? Tente de novo. Travou? Use uma dica.</p></div>
+        <div class="passo"><b>3</b><h3>Ganhe números</h3><p>A cada ${cfg.niveisPorNumero} níveis, 1 número da sorte. Convide amigos e ganhe mais.</p></div>
+      </section>`;
+  };
+  pintar(null);
+  if (ref && !conta) {
+    try {
+      const r = await api('convite/' + encodeURIComponent(ref), { metodo: 'GET' });
+      if (v === versao && r.primeiroNome) pintar(r.primeiroNome);
+    } catch (e) {}
+  }
+}
+
+// ---------- Cadastro ----------
+async function renderCadastro() {
+  if (conta) return go('#quiz');
+  const v = versao;
+  let conv = null;
+  const ref = lsGet('refPendente');
+  if (ref) { try { conv = (await api('convite/' + encodeURIComponent(ref), { metodo: 'GET' })).primeiroNome; } catch (e) {} }
+  if (v !== versao) return;
+  app.innerHTML = `<section class="card estreito">
+    <h2 style="margin-top:0">Cadastro</h2>
+    ${conv ? `<div class="aviso ok">Você foi convidado(a) por <b>${esc(conv)}</b>.</div>` : ''}
+    <form id="f" novalidate>
+      <label for="nome">Seu nome</label><input type="text" id="nome" autocomplete="name" required>
+      <label for="tel">Seu WhatsApp (com DDD)</label><input type="tel" id="tel" autocomplete="tel" inputmode="numeric" placeholder="(00) 90000-0000" required>
+      <fieldset>
+        <legend>Você tem ${cfg.idadeMinima} anos ou mais?</legend>
+        <div class="escolha">
+          <label><input type="radio" name="idade" value="sim"> Sim</label>
+          <label><input type="radio" name="idade" value="nao"> Não</label>
+        </div>
+      </fieldset>
+      <div id="bloqueio"></div>
+      <label class="check" style="margin-top:16px"><input type="checkbox" id="aceite"> Li e aceito o <a href="#regulamento" target="_blank">regulamento</a> e a <a href="#privacidade" target="_blank">política de privacidade</a>.</label>
+      <div id="caixa-turnstile"></div>
+      <p class="erro" id="erro"></p>
+      <button class="btn grande cheio" id="enviar">Cadastrar e jogar</button>
+    </form>
+    <p class="centro mini" style="margin-bottom:0">Já se cadastrou em outro celular? Abra o seu <b>link de acesso</b> (ele fica em "Minha conta" no primeiro celular).</p>
+  </section>`;
+  const erro = m => { $('#erro').textContent = m; };
+  const btn = $('#enviar');
+  $('#tel').addEventListener('input', e => { e.target.value = fmtTel(e.target.value); });
+  app.querySelectorAll('input[name=idade]').forEach(r => r.onchange = () => {
+    const menor = r.value === 'nao' && r.checked;
+    $('#bloqueio').innerHTML = menor ? `<div class="aviso bloqueio" style="margin:12px 0 0">Desculpe, só podem participar pessoas com ${cfg.idadeMinima} anos ou mais.</div>` : '';
+    btn.disabled = menor;
+  });
+
+  let ts = null, widget = null;
+  carregarTurnstile()
+    .then(t => {
+      if (v !== versao) return;
+      ts = t;
+      widget = t.render('#caixa-turnstile', { sitekey: CHAVE_TURNSTILE, language: 'pt-br', theme: 'auto' });
+    })
+    .catch(e => { if (v === versao) erro(e.message); });
+
+  $('#f').onsubmit = async e => {
+    e.preventDefault();
+    const nome = $('#nome').value.trim(), telefone = soDigitos($('#tel').value);
+    const idade = app.querySelector('input[name=idade]:checked')?.value;
+    if (nome.length < 3) return erro('Digite seu nome completo.');
+    if (telefone.length !== 11 || telefone[2] !== '9') return erro('Digite seu WhatsApp com DDD, ex.: (11) 91234-5678.');
+    if (!idade) return erro(`Responda se você tem ${cfg.idadeMinima} anos ou mais.`);
+    if (idade !== 'sim') return erro(`Desculpe, só podem participar pessoas com ${cfg.idadeMinima} anos ou mais.`);
+    if (!$('#aceite').checked) return erro('Aceite o regulamento e a política de privacidade.');
+    const resposta = ts ? ts.getResponse(widget) : '';
+    if (!resposta) return erro('Aguarde a verificação anti-robô terminar.');
+    btn.disabled = true; erro('');
+    try {
+      const { token } = await chamar('cadastrar', { nome, telefone, ref: lsGet('refPendente') || '', maiorIdade: true, aceite: true, turnstile: resposta });
+      lsSet(CHAVE_SESSAO, token);
+      lsDel('refPendente');
+      conta = await chamar('minhaConta');
+      go('#quiz');
+    } catch (err) {
+      btn.disabled = false;
+      erro(err.message);
+      if (ts) ts.reset(widget);
+    }
+  };
+}
+
+// ---------- Quiz ----------
+async function renderQuiz() {
+  if (!exigirCadastro()) return;
+  const v = versao;
+  carregando('Carregando pergunta…');
+  let q;
+  try { q = await chamar('proximaPergunta'); }
+  catch (e) { if (v === versao && !tratarSessaoPerdida(e)) app.innerHTML = `<div class="card centro">${mensagemErro(e)}</div>`; return; }
+  if (v !== versao) return;
+  const ordem = embaralhar(q.opcoes.map((_, i) => i));
+  app.innerHTML = `<section class="quiz card">
+    <div class="quiz-top">
+      <span class="pill">Nível ${q.nivel}</span>
+      <span class="mini">Pergunta ${q.pergunta + 1} de ${q.total}</span>
+      <span class="pill ouro" title="Seus números da sorte">🍀 ${q.numeros}</span>
+    </div>
+    <p class="mini" style="margin:8px 0 0">Próximo número da sorte ao concluir o nível ${q.proximoMarco}</p>
+    <h2 class="pergunta">${esc(q.texto)}</h2>
+    <div class="opcoes">${ordem.map(i => `<button class="opcao" data-i="${i}">${esc(q.opcoes[i])}</button>`).join('')}</div>
+    <p class="feedback" id="fb" aria-live="polite"></p>
+    <div class="dica" id="dica"></div>
+  </section>`;
+  const fb = $('#fb'), caixaDica = $('#dica');
+  const botoes = [...app.querySelectorAll('.opcao')];
+  const ativas = () => botoes.filter(x => !x.classList.contains('errada') && !x.classList.contains('eliminada'));
+  let encerrada = false;
+
+  const aplicarDica = eliminadas => {
+    eliminadas.forEach(i => { const b = botoes.find(x => +x.dataset.i === i); b.classList.add('eliminada'); b.disabled = true; });
+    caixaDica.innerHTML = '<span class="mini">💡 Dica usada: 2 opções erradas foram eliminadas.</span>';
+  };
+  const ofertaDica = (aviso = '') => {
+    caixaDica.innerHTML = `<span class="mini">${aviso || 'Travou? Assista um anúncio e eliminamos 2 opções erradas.'}</span>
+      <button class="btn peq" id="pedirDica">💡 Ver dica</button>`;
+    $('#pedirDica').onclick = async () => {
+      if (encerrada) return;
+      $('#pedirDica').disabled = true;
+      const r = await anuncioPremiado();
+      if (v !== versao || encerrada) return;
+      if (r === 'fechou') return ofertaDica('O anúncio foi fechado antes do fim, então a dica não foi liberada.');
+      if (r === 'indisponivel') return ofertaDica('Nenhum anúncio disponível agora. Tente de novo daqui a pouco.');
+      try { const { eliminadas } = await chamar('usarDica'); if (v === versao && !encerrada) aplicarDica(eliminadas); }
+      catch (e) { if (v === versao && !tratarSessaoPerdida(e)) ofertaDica(esc(e.message)); }
+    };
+  };
+  q.dica ? aplicarDica(q.dica) : ofertaDica();
+
+  botoes.forEach(b => b.onclick = async () => {
+    if (encerrada) return;
+    const livres = ativas();
+    livres.forEach(x => x.disabled = true);
+    let r;
+    try { r = await chamar('responder', { opcao: +b.dataset.i }); }
+    catch (e) {
+      if (v !== versao || tratarSessaoPerdida(e)) return;
+      fb.style.color = 'var(--err)'; fb.textContent = e.message; livres.forEach(x => x.disabled = false);
+      return;
+    }
+    if (v !== versao) return;
+    if (r.resultado === 'errada') {
+      livres.forEach(x => x.disabled = false);
+      b.classList.add('errada'); b.disabled = true;
+      fb.style.color = 'var(--err)'; fb.textContent = '❌ Não foi dessa vez. Tente outra opção!';
+      return;
+    }
+    encerrada = true;
+    caixaDica.innerHTML = '';
+    b.classList.add('certa'); fb.style.color = 'var(--ok)'; fb.textContent = '✅ Acertou!';
+    setTimeout(() => { if (v !== versao) return; r.nivelConcluido ? telaNivelConcluido(r) : renderQuiz(); }, 700);
+  });
+}
+function telaNivelConcluido(r) {
+  const n = r.nivelConcluido;
+  app.innerHTML = `<section class="card centro quiz">
+    <div class="emoji">${r.ganhos.length ? '🍀' : '⭐'}</div>
+    <h2>Nível ${n} concluído!</h2>
+    ${r.ganhos.length
+      ? `<p>Você ganhou um número da sorte:</p><div class="numeros grande">${r.ganhos.map(g => `<span class="num">${esc(g)}</span>`).join('')}</div>`
+      : `<p>${r.faltam === 1 ? 'Falta' : 'Faltam'} <b>${r.faltam}</b> ${r.faltam === 1 ? 'nível' : 'níveis'} para seu próximo número da sorte.</p>`}
+    <button class="btn grande" id="continuar">Ir para o nível ${n + 1}</button>
+  </section>`;
+  $('#continuar').onclick = async () => {
+    if (r.mostrarAnuncio) await mostrarAnuncio('nivel-' + (n + 1));
+    renderQuiz();
+  };
+}
+
+// ---------- Minha conta ----------
+async function renderConta() {
+  if (!exigirCadastro()) return;
+  const v = versao;
+  carregando();
+  try { conta = await chamar('minhaConta'); }
+  catch (e) { if (v === versao && !tratarSessaoPerdida(e)) app.innerHTML = `<div class="card centro">${mensagemErro(e)}</div>`; return; }
+  if (v !== versao) return;
+  const nums = conta.numeros, link = linkIndicacao(conta.codigo), acesso = linkAcesso(lsGet(CHAVE_SESSAO));
+  const msg = `Tô concorrendo a um ${cfg.premio} respondendo um quiz fácil e grátis! Cadastre-se pelo meu link: ${link}`;
+  app.innerHTML = `
+    <section class="card">
+      <h2 style="margin-top:0">Olá, ${esc(primeiroNome(conta.nome))}!</h2>
+      <p>Você está no <b>nível ${conta.nivel}</b> e tem <b>${nums.length}</b> ${nums.length === 1 ? 'número da sorte' : 'números da sorte'}.</p>
+      ${nums.length ? `<div class="numeros" style="justify-content:flex-start">${nums.map(n => `<span class="num" title="${esc(n.origem)}">${esc(n.numero)}</span>`).join('')}</div>` : `<p class="mini">Conclua o nível ${cfg.niveisPorNumero} para ganhar o primeiro.</p>`}
+      <a class="btn" href="#quiz">Continuar jogando</a>
+    </section>
+    <section class="card">
+      <h3 style="margin-top:0">Convide amigos e ganhe mais números</h3>
+      <p>Quando um amigo se cadastra pelo seu link e conclui o nível ${cfg.nivelIndicacao}, você ganha ${cfg.numerosPorIndicacao} ${cfg.numerosPorIndicacao === 1 ? 'número da sorte' : 'números da sorte'}.</p>
+      <div class="linha"><input type="text" id="link" value="${esc(link)}" readonly><button class="btn" id="copiar">Copiar</button>
+      <a class="btn zap" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(msg)}">WhatsApp</a></div>
+      <ul class="lista" style="margin-top:12px">${conta.indicados.length ? conta.indicados.map(x => `<li><span>${esc(x.nome)}</span><span class="mini">${x.valido ? '✅ valeu número' : 'ainda jogando'}</span></li>`).join('') : '<li class="mini">Nenhum amigo cadastrado ainda.</li>'}</ul>
+    </section>
+    <section class="card">
+      <h3 style="margin-top:0">🔑 Seu link de acesso</h3>
+      <p class="mini">Seu cadastro fica guardado neste celular. Para jogar em outro aparelho, ou se trocar de celular, abra este link. <b>Não envie para ninguém</b>: quem tiver o link entra na sua conta.</p>
+      <div class="linha"><input type="text" id="acesso" value="${esc(acesso)}" readonly><button class="btn sec" id="copiarAcesso">Copiar</button>
+      <a class="btn zap" target="_blank" rel="noopener" href="${esc(linkZap(conta.telefone, 'Meu link de acesso do Quiz Premiado (não compartilhe): ' + acesso))}">Guardar no meu WhatsApp</a></div>
+    </section>`;
+  $('#copiar').onclick = () => copiar($('#link'), $('#copiar'));
+  $('#copiarAcesso').onclick = () => copiar($('#acesso'), $('#copiarAcesso'));
+}
+
+// ---------- Prêmio ----------
+function renderPremio() {
+  // Sem data configurada, a página não mostra data do sorteio nem contagem de dias.
+  const dias = cfg.dataSorteio ? Math.ceil((new Date(cfg.dataSorteio + 'T20:00:00') - Date.now()) / 86400000) : 0;
+  app.innerHTML = `<section class="card centro">
+    <div style="max-width:280px;margin:0 auto">${fotoPremio()}</div>
+    <h1 style="margin:8px 0">${esc(cfg.premio)}</h1>
+    ${cfg.dataSorteio ? `<p>Sorteio em <b>${dataBR(cfg.dataSorteio)}</b> pela <b>${esc(cfg.extracao)}</b>.</p>` : ''}
+    ${dias > 0 ? `<p class="pill ouro" style="display:inline-block">Faltam ${dias} ${dias === 1 ? 'dia' : 'dias'}</p>` : ''}
+    <p class="mini">O número ganhador é formado a partir do resultado da ${esc(cfg.extracao)}, conforme a regra do regulamento.</p>
+    <p class="mini">${cfg.certificado ? 'Certificado de Autorização SPA/MF nº ' + esc(cfg.certificado) : '⚠️ Promoção aguardando autorização da SPA/MF.'}</p>
+    <a class="btn grande" href="#quiz">Participar grátis</a>
+  </section>`;
+}
+
+// ---------- Páginas legais (modelos: substituir pelos textos aprovados) ----------
+function renderRegulamento() {
+  app.innerHTML = `<section class="card">
+    <div class="aviso alerta">⚠️ Modelo. Substitua pelo regulamento aprovado pela Secretaria de Prêmios e Apostas (SPA/MF).</div>
+    <h2>Regulamento</h2>
+    <ol>
+      <li><b>Empresa promotora:</b> [razão social, CNPJ, endereço].</li>
+      <li><b>Período:</b> [data de início] a [data de término]. Sorteio em ${cfg.dataSorteio ? dataBR(cfg.dataSorteio) : '[data do sorteio]'} pela ${esc(cfg.extracao)}.</li>
+      <li><b>Participação:</b> gratuita, para pessoas com ${cfg.idadeMinima} anos ou mais residentes no Brasil, mediante cadastro com nome e número de WhatsApp. Cada número de WhatsApp pode ser cadastrado uma única vez.</li>
+      <li><b>Números da sorte:</b> 1 número a cada ${cfg.niveisPorNumero} níveis concluídos no quiz, e ${cfg.numerosPorIndicacao} por amigo indicado que concluir o nível ${cfg.nivelIndicacao}. A visualização de anúncios não é condição para receber números.</li>
+      <li><b>Dicas:</b> opcionais. Ao assistir um anúncio premiado até o fim, o participante pode eliminar 2 opções erradas da pergunta atual. As dicas não dão números da sorte. Todas as perguntas podem ser respondidas sem dica, com tentativas ilimitadas.</li>
+      <li><b>Prêmio:</b> ${esc(cfg.premio)} [cor, valor].</li>
+      <li><b>Apuração:</b> [regra de formação do número a partir da ${esc(cfg.extracao)}].</li>
+      <li><b>Entrega do prêmio:</b> o ganhador será contatado pelo WhatsApp cadastrado. [prazo e forma]. Se o ganhador tiver menos de 18 anos, o prêmio será entregue ao seu responsável legal.</li>
+      <li><b>Autorização:</b> Certificado SPA/MF nº ${cfg.certificado ? esc(cfg.certificado) : '[número]'}.</li>
+    </ol>
+  </section>`;
+}
+function renderPrivacidade() {
+  app.innerHTML = `<section class="card">
+    <div class="aviso alerta">⚠️ Modelo. Revise com um profissional antes de publicar.</div>
+    <h2>Política de privacidade (LGPD)</h2>
+    <p><b>Quais dados coletamos:</b> nome e número de WhatsApp.</p>
+    <p><b>Para que usamos:</b> identificar participantes, gerar números da sorte, contatar o ganhador e cumprir obrigações legais da promoção.</p>
+    <p><b>Compartilhamento:</b> somente com órgãos públicos quando exigido por lei. Não vendemos seus dados.</p>
+    <p><b>Anúncios:</b> o Google pode usar cookies para exibir anúncios. Saiba mais nas políticas do Google.</p>
+    <p><b>Adolescentes:</b> participantes de ${cfg.idadeMinima} a 17 anos devem participar com o conhecimento dos pais ou responsáveis.</p>
+    <p><b>Seus direitos:</b> acessar, corrigir ou pedir a exclusão dos seus dados pelo contato [WhatsApp ou e-mail da empresa].</p>
+  </section>`;
+}
+
+// ---------- Administração (acesso pelo "©" do rodapé, protegido por senha) ----------
+const CAMPOS_CONFIG = [
+  ['premio', 'Prêmio', 'text'],
+  ['dataSorteio', 'Data do sorteio (vazio = não mostrar no site)', 'date'],
+  ['certificado', 'Nº do Certificado de Autorização SPA/MF', 'text'],
+  ['idadeMinima', 'Idade mínima para participar', 'number'],
+  ['perguntasPorNivel', 'Perguntas por nível', 'number'],
+  ['niveisPorNumero', 'Níveis para ganhar 1 número da sorte', 'number'],
+  ['nivelIndicacao', 'Nível que o indicado precisa concluir', 'number'],
+  ['numerosPorIndicacao', 'Números da sorte por indicação válida', 'number'],
+  ['minutosEntreAnuncios', 'Anúncio a cada (minutos)', 'number'],
+  ['niveisEntreAnuncios', '…ou a cada (níveis), o que vier primeiro', 'number']
+];
+
+function renderEntrarAdmin(aviso = '') {
+  app.innerHTML = `<section class="card estreito">
+    <h2 style="margin-top:0">Área restrita</h2>
+    ${aviso ? `<div class="aviso alerta">${esc(aviso)}</div>` : ''}
+    <form id="fa" novalidate>
+      <label for="senha">Senha</label><input type="password" id="senha" autocomplete="current-password" required>
+      <p class="erro" id="erro"></p>
+      <button class="btn cheio">Entrar</button>
+    </form>
+  </section>`;
+  $('#senha').focus();
+  $('#fa').onsubmit = async e => {
+    e.preventDefault();
+    const btn = $('#fa button'); btn.disabled = true;
+    try {
+      const { token } = await api('admin/entrar', { corpo: { senha: $('#senha').value } });
+      lsSet(CHAVE_ADMIN, token);
+      render();
+    } catch (err) {
+      btn.disabled = false;
+      $('#erro').textContent = err.message;
+    }
+  };
+}
+
+async function renderAdmin(aba) {
+  if (!lsGet(CHAVE_ADMIN)) return renderEntrarAdmin();
+  const v = versao;
+  const abas = [['resumo', 'Resumo'], ['config', 'Configurações'], ['perguntas', 'Perguntas'], ['participantes', 'Participantes'], ['numeros', 'Números da sorte']];
+  app.innerHTML = `<div class="admin-topo"><h2>Administração</h2><button class="btn sec peq" id="sairAdmin">Sair do painel</button></div>
+    <nav class="abas">${abas.map(([k, t]) => `<a href="#admin/${k}" class="${k === aba ? 'ativo' : ''}">${t}</a>`).join('')}</nav>
+    <div id="painel"><p class="carregando">Carregando…</p></div>`;
+  $('#sairAdmin').onclick = async () => {
+    try { await api('sair', { admin: true }); } catch (e) {}
+    lsDel(CHAVE_ADMIN);
+    go('#');
+  };
+  const el = $('#painel');
+  const paineis = { resumo: adminResumo, config: adminConfig, perguntas: adminPerguntas, participantes: adminParticipantes, numeros: adminNumeros };
+  try { await (paineis[aba] || adminResumo)(el, v); }
+  catch (e) {
+    if (v !== versao) return;
+    if (e.status === 401) { lsDel(CHAVE_ADMIN); return renderEntrarAdmin('Sua sessão de administrador expirou. Entre de novo.'); }
+    el.innerHTML = `<div class="card">${mensagemErro(e)}</div>`;
+  }
+}
+async function adminResumo(el, v) {
+  const r = await adm('resumo');
+  if (v !== versao) return;
+  el.innerHTML = `<div class="kpis">
+    <div class="kpi"><b>${r.participantes}</b><span>participantes</span></div>
+    <div class="kpi"><b>${r.numeros}</b><span>números da sorte</span></div>
+    <div class="kpi"><b>${r.indicacoes}</b><span>indicações válidas</span></div>
+    <div class="kpi"><b>${r.perguntas}</b><span>perguntas</span></div>
+  </div>
+  ${r.perguntas ? '' : '<div class="aviso alerta">Nenhuma pergunta cadastrada. Vá em <a href="#admin/perguntas">Perguntas</a> e carregue as perguntas prontas.</div>'}`;
+}
+async function adminConfig(el) {
+  el.innerHTML = `<form class="card" id="fc"><div class="grade">
+    ${CAMPOS_CONFIG.map(([k, t, tipo]) => `<div><label for="c_${k}">${t}</label><input type="${tipo}" id="c_${k}" name="${k}" value="${esc(cfg[k])}" ${tipo === 'number' ? 'min="1"' : ''}></div>`).join('')}
+    </div><p class="mini">O anúncio entre níveis só aparece na troca de nível, nunca no meio de uma pergunta.</p>
+    <button class="btn">Salvar</button> <span id="ok" class="mini"></span></form>`;
+  $('#fc').onsubmit = async e => {
+    e.preventDefault();
+    const novo = Object.fromEntries(CAMPOS_CONFIG.map(([k]) => [k, e.target.elements[k].value.trim()]));
+    try { cfg = await adm('config', { metodo: 'PUT', corpo: novo }); $('#ok').textContent = '✅ Salvo'; }
+    catch (err) { $('#ok').textContent = 'Erro ao salvar: ' + err.message; }
+  };
+}
+async function adminPerguntas(el, v) {
+  const perguntas = await adm('perguntas');
+  if (v !== versao) return;
+  el.innerHTML = `${perguntas.length ? '' : `<div class="aviso alerta">Nenhuma pergunta ainda. <button class="btn peq" id="semear">Carregar 40 perguntas prontas</button></div>`}
+  <form class="card" id="fp">
+    <h3 style="margin-top:0" id="tit">Nova pergunta</h3><input type="hidden" name="id">
+    <label for="ptexto">Pergunta</label><input type="text" id="ptexto" name="texto" required>
+    <label>Opções (marque a correta)</label>
+    ${[0, 1, 2, 3].map(i => `<label class="op"><input type="radio" name="correta" value="${i}" ${i === 0 ? 'checked' : ''}><input type="text" name="op${i}" placeholder="Opção ${i + 1}" required></label>`).join('')}
+    <p class="erro" id="perro"></p>
+    <button class="btn">Salvar pergunta</button> <button type="button" class="btn sec" id="pcancel">Limpar</button>
+  </form>
+  <div class="card"><p class="mini" style="margin-top:0">${perguntas.length} perguntas</p><ul class="lista">${perguntas.map(p => `<li><div><b>${esc(p.texto)}</b><small>✔ ${esc(p.opcoes[p.correta])}</small></div>
+    <div class="linha" style="flex-wrap:nowrap"><button class="btn sec peq" data-ed="${p.id}">Editar</button><button class="btn perigo peq" data-del="${p.id}">Excluir</button></div></li>`).join('')}</ul></div>`;
+  const f = $('#fp');
+  if ($('#semear')) $('#semear').onclick = async () => {
+    $('#semear').disabled = true;
+    try { await adm('perguntas/padrao', { metodo: 'POST' }); render(); }
+    catch (e) { alert(e.message); $('#semear').disabled = false; }
+  };
+  $('#pcancel').onclick = () => { f.reset(); f.elements.id.value = ''; $('#tit').textContent = 'Nova pergunta'; };
+  el.querySelectorAll('[data-ed]').forEach(b => b.onclick = () => {
+    const p = perguntas.find(x => String(x.id) === b.dataset.ed);
+    f.elements.id.value = p.id; f.elements.texto.value = p.texto;
+    p.opcoes.forEach((o, i) => { f.elements['op' + i].value = o; });
+    f.querySelector(`input[name=correta][value="${p.correta}"]`).checked = true;
+    $('#tit').textContent = 'Editar pergunta'; window.scrollTo(0, 0);
+  });
+  el.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('Excluir esta pergunta?')) return;
+    try { await adm('perguntas/' + b.dataset.del, { metodo: 'DELETE' }); render(); }
+    catch (e) { alert(e.message); }
+  });
+  f.onsubmit = async e => {
+    e.preventDefault();
+    const corpo = {
+      texto: f.elements.texto.value.trim(),
+      opcoes: [0, 1, 2, 3].map(i => f.elements['op' + i].value.trim()),
+      correta: +f.querySelector('input[name=correta]:checked').value
+    };
+    if (!corpo.texto || corpo.opcoes.some(o => !o)) return ($('#perro').textContent = 'Preencha a pergunta e as 4 opções.');
+    const id = f.elements.id.value;
+    try {
+      await adm('perguntas' + (id ? '/' + id : ''), { metodo: id ? 'PUT' : 'POST', corpo });
+      render();
+    } catch (err) { $('#perro').textContent = err.message; }
+  };
+}
+async function adminParticipantes(el, v) {
+  const lista = await adm('participantes');
+  if (v !== versao) return;
+  const cab = ['Nome', 'WhatsApp', 'Níveis concluídos', 'Números', 'Indicações válidas', 'Indicado por', 'Cadastro'];
+  const linhas = lista.map(p => [p.nome, fmtTel(p.telefone), p.nivel - 1, p.total_numeros, p.indicacoes, p.indicado_por_nome || '', quando(p.criado_em)]);
+  el.innerHTML = `<div class="card"><p><button class="btn peq" id="csv">Baixar planilha (CSV)</button></p>
+    <div id="novoLink"></div>
+    <div class="tabela"><table><thead><tr>${cab.map(h => `<th>${h}</th>`).join('')}<th>Acesso</th></tr></thead>
+    <tbody>${linhas.map((l, i) => `<tr>${l.map(x => `<td>${esc(x)}</td>`).join('')}<td><button class="btn sec peq" data-acesso="${i}">Novo link</button></td></tr>`).join('') || `<tr><td colspan="${cab.length + 1}" class="mini">Nenhum participante ainda.</td></tr>`}</tbody></table></div></div>`;
+  $('#csv').onclick = () => baixarCSV('participantes.csv', [cab, ...linhas]);
+  // Para quem trocou de celular ou perdeu o acesso: gera um link novo e desativa os antigos.
+  el.querySelectorAll('[data-acesso]').forEach(b => b.onclick = async () => {
+    const p = lista[+b.dataset.acesso];
+    if (!confirm(`Gerar um novo link de acesso para ${p.nome}?\n\nO link antigo vai parar de funcionar. Confirme antes que é mesmo a pessoa dona do WhatsApp ${fmtTel(p.telefone)}.`)) return;
+    try {
+      const { token } = await adm(`participantes/${encodeURIComponent(p.uid)}/acesso`, { metodo: 'POST' });
+      const link = linkAcesso(token);
+      $('#novoLink').innerHTML = `<div class="aviso ok"><b>Novo link de ${esc(p.nome)}:</b>
+        <div class="linha" style="margin-top:8px"><input type="text" id="linkNovo" value="${esc(link)}" readonly><button class="btn sec peq" id="copiarNovo">Copiar</button>
+        <a class="btn zap peq" target="_blank" rel="noopener" href="${esc(linkZap(p.telefone, `Olá, ${primeiroNome(p.nome)}! Aqui está seu novo link de acesso ao Quiz Premiado (não compartilhe): ${link}`))}">Enviar no WhatsApp dela(e)</a></div></div>`;
+      $('#copiarNovo').onclick = () => copiar($('#linkNovo'), $('#copiarNovo'));
+    } catch (e) { alert(e.message); }
+  });
+}
+async function adminNumeros(el, v) {
+  const ultimos = await adm('numeros');
+  if (v !== versao) return;
+  const cab = ['Número', 'Participante', 'Origem', 'Data'];
+  el.innerHTML = `<div class="card"><label for="busca">Conferir número sorteado</label>
+    <div class="linha"><input type="search" id="busca" inputmode="numeric" maxlength="5" placeholder="00000"><button class="btn" id="buscar">Buscar</button></div>
+    <div id="res" style="margin-top:12px"></div></div>
+    <div class="card"><p><button class="btn peq" id="csv">Baixar planilha completa (CSV)</button></p>
+    <p class="mini">Últimos 100 números gerados:</p>
+    <div class="tabela"><table><thead><tr>${cab.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${ultimos.map(n => `<tr>${[n.numero, n.nome, n.origem, quando(n.criado_em)].map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${cab.length}" class="mini">Nenhum número gerado ainda.</td></tr>`}</tbody></table></div></div>`;
+  $('#buscar').onclick = async () => {
+    const q = soDigitos($('#busca').value);
+    if (!q) return;
+    try {
+      const n = await adm('numeros/' + q);
+      $('#res').innerHTML = n.naoEncontrado
+        ? `<div class="aviso alerta">O número ${esc(n.numero)} não foi distribuído. Siga a regra do regulamento para achar o número mais próximo.</div>`
+        : `<div class="aviso ok">🏆 Número <b>${esc(n.numero)}</b> pertence a <b>${esc(n.nome)}</b>, WhatsApp ${esc(fmtTel(n.telefone))}.<br><span class="mini">${esc(n.origem)}</span></div>`;
+    } catch (e) { $('#res').innerHTML = `<div class="aviso alerta">${mensagemErro(e)}</div>`; }
+  };
+  $('#csv').onclick = async () => {
+    const todos = await adm('numeros?todos=1');
+    baixarCSV('numeros-da-sorte.csv', [['Número', 'Participante', 'WhatsApp', 'Origem', 'Data'],
+      ...todos.map(n => [n.numero, n.nome, fmtTel(n.telefone), n.origem, quando(n.criado_em)])]);
+  };
+}
+
+// ---------- Início do app ----------
+// ?ref=CÓDIGO (convite de um amigo) e ?acesso=TOKEN (link de acesso pessoal).
+const params = new URLSearchParams(location.search);
+if (params.get('ref')) lsSet('refPendente', params.get('ref').toUpperCase().replace(/[^A-Z0-9]/g, ''));
+if (params.get('acesso')) {
+  lsSet(CHAVE_SESSAO, params.get('acesso'));
+  history.replaceState(null, '', location.pathname + '#conta');
+}
+
+api('config', { metodo: 'GET' })
+  .then(c => { cfg = { ...CONFIG_PADRAO, ...c }; if (pronto) render(); })
+  .catch(() => {});
+
+if (lsGet(CHAVE_SESSAO)) {
+  try { conta = await chamar('minhaConta'); }
+  catch (e) { if (e.status === 401) lsDel(CHAVE_SESSAO); }
+}
+pronto = true;
+render();
+</script>
+</body>
+</html>
